@@ -1,6 +1,6 @@
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.VITE_API_URL || '',
+  BASE_URL: import.meta.env.VITE_API_URL || 'https://gateway-202671058278.asia-south1.run.app',
   TIMEOUT: 30000,
   ENDPOINTS: {
     // Auth
