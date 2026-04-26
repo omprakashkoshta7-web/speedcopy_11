@@ -22,20 +22,17 @@ build
 .yarn/install-state.gz
 .pnp.*
 
-# But allow public folder images
-!public/
-!public/**/*.png
-!public/**/*.jpg
-!public/**/*.jpeg
-!public/**/*.gif
-!public/**/*.webp
-!public/**/*.svg
+# Exclude all images from public folder
+public/*.png
+public/*.jpg
+public/*.jpeg
+public/*.gif
+public/*.webp
 
-# Exclude large/unnecessary files
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-.DS_Store
 Thumbs.db
