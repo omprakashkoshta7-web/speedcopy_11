@@ -59,8 +59,13 @@ interface FrameData {
 
 class DesignService {
   async getPremiumTemplates(params?: { productId?: string; category?: string }): Promise<DesignTemplate[]> {
-    const response = await apiClient.get('/api/designs/templates/premium', { params });
-    return response.data?.data || response.data || [];
+    try {
+      const response = await apiClient.get('/api/designs/templates/premium', { params });
+      return response.data?.data || response.data || [];
+    } catch (error: any) {
+      console.error('Failed to load premium templates:', error);
+      return [];
+    }
   }
 
   async getTemplates(filters?: {
@@ -69,16 +74,21 @@ class DesignService {
     isPremium?: boolean;
     productId?: string;
   }) {
-    const params = new URLSearchParams();
-    if (filters?.flowType) params.append('flowType', filters.flowType);
-    if (filters?.category) params.append('category', filters.category);
-    if (filters?.isPremium !== undefined) params.append('isPremium', String(filters.isPremium));
-    if (filters?.productId) params.append('productId', filters.productId);
+    try {
+      const params = new URLSearchParams();
+      if (filters?.flowType) params.append('flowType', filters.flowType);
+      if (filters?.category) params.append('category', filters.category);
+      if (filters?.isPremium !== undefined) params.append('isPremium', String(filters.isPremium));
+      if (filters?.productId) params.append('productId', filters.productId);
 
-    const response = await apiClient.get(
-      `/api/designs/templates?${params.toString()}`
-    );
-    return response.data;
+      const response = await apiClient.get(
+        `/api/designs/templates?${params.toString()}`
+      );
+      return response.data;
+    } catch (error: any) {
+      console.error('Failed to load templates:', error);
+      return { success: false, data: [], message: 'Failed to load templates' };
+    }
   }
 
   async createBlankDesign(data: BlankDesignData) {
