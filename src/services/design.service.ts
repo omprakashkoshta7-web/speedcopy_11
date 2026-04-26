@@ -181,8 +181,29 @@ class DesignService {
   // Load frames for a product
   async loadProductFrames(productId: string) {
     try {
-      const response = await apiClient.get(`/api/designs/product/${productId}/frames`);
-      return response.data?.data || response.data || [];
+      // Try multiple endpoints
+      const endpoints = [
+        `/api/designs/product/${productId}/frames`,
+        `/api/designs/frames?productId=${productId}`,
+        `/api/designs?productId=${productId}`
+      ];
+
+      for (const endpoint of endpoints) {
+        try {
+          const response = await apiClient.get(endpoint);
+          const data = response.data?.data || response.data || [];
+          if (Array.isArray(data) && data.length > 0) {
+            console.log(`✅ Frames loaded from ${endpoint}:`, data);
+            return data;
+          }
+        } catch (err) {
+          console.log(`⚠️ Endpoint ${endpoint} failed, trying next...`);
+          continue;
+        }
+      }
+
+      console.log('⚠️ No frames found from any endpoint, using defaults');
+      return [];
     } catch (error) {
       console.error('Failed to load product frames:', error);
       return [];
