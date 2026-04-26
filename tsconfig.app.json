@@ -28,8 +28,7 @@
     "strictFunctionTypes": false,
     "strictBindCallApply": false,
     "strictPropertyInitialization": false,
-    "noImplicitThis": false,
-    "suppressImplicitAnyIndexErrors": true
+    "noImplicitThis": false
   },
   "include": ["src"]
 }
