@@ -19,6 +19,16 @@ export const API_CONFIG = {
     },
     // Products
     PRODUCTS: {
+      GENERAL: {
+        LIST: '/api/products',
+        BY_ID: (id: string) => `/api/products/${id}`,
+        BY_SLUG: (slug: string) => `/api/products/slug/${slug}`,
+      },
+      CATEGORIES: {
+        LIST: '/api/products/categories',
+        BY_SLUG: (slug: string) => `/api/products/categories/${slug}`,
+        SUBCATEGORIES: (categoryId: string) => `/api/products/categories/${categoryId}/subcategories`,
+      },
       BUSINESS_PRINTING: {
         HOME: '/api/business-printing/home',
         TYPES: '/api/business-printing/types',
@@ -33,17 +43,28 @@ export const API_CONFIG = {
         HOME: '/api/products/printing/home',
         CATEGORIES: '/api/products/printing/categories',
         PRODUCTS: '/api/products/printing/products',
+        DOCUMENT_TYPES: '/api/products/printing/document-types',
+        DOCUMENT_TYPE_BY_ID: (type: string) => `/api/products/printing/document-types/${type}`,
+        SERVICE_PACKAGES: '/api/products/printing/service-packages',
+        UPLOAD: '/api/products/printing/upload',
+        CONFIGURE: '/api/products/printing/configure',
+        CONFIG_BY_ID: (id: string) => `/api/products/printing/config/${id}`,
+        PICKUP_LOCATIONS: '/api/products/printing/pickup-locations',
       },
       GIFTING: {
         HOME: '/api/gifting/home',
         CATEGORIES: '/api/gifting/categories',
         PRODUCTS: '/api/gifting/products',
+        SEARCH: '/api/gifting/search',
         PRODUCT_BY_ID: (id: string) => `/api/gifting/products/${id}`,
       },
       SHOPPING: {
         HOME: '/api/shopping/home',
         CATEGORIES: '/api/shopping/categories',
         PRODUCTS: '/api/shopping/products',
+        SEARCH: '/api/shopping/search',
+        DEALS: '/api/shopping/deals',
+        TRENDING: '/api/shopping/trending',
         PRODUCT_BY_ID: (id: string) => `/api/shopping/products/${id}`,
       },
     },
@@ -58,15 +79,20 @@ export const API_CONFIG = {
     PAYMENT: {
       CREATE: '/api/wallet/razorpay/initiate',
       VERIFY: '/api/wallet/razorpay/verify',
+      INITIATE: '/api/wallet/razorpay/initiate',
     },
     // Finance
     FINANCE: {
       WALLET: '/api/wallet',
+      WALLET_BALANCE: '/api/wallet/balance',
       WALLET_OVERVIEW: '/api/wallet/overview',
       LEDGER: '/api/wallet/ledger',
+      TRANSACTION_HISTORY: '/api/wallet/transactions',
       TOPUP_CONFIG: '/api/wallet/topup-config',
       TOPUP_PREVIEW: '/api/wallet/topup-preview',
       ADD_FUNDS: '/api/wallet/add-funds',
+      RAZORPAY_INITIATE: '/api/wallet/razorpay/initiate',
+      RAZORPAY_VERIFY: '/api/wallet/razorpay/verify',
       REFERRALS: '/api/referrals',
       REFERRAL_SUMMARY: '/api/referrals/summary',
       APPLY_REFERRAL: '/api/referrals/apply',
@@ -74,8 +100,21 @@ export const API_CONFIG = {
     // Notifications
     NOTIFICATIONS: {
       GET_ALL: '/api/notifications',
+      GET_SUMMARY: '/api/notifications/summary',
       MARK_READ: (id: string) => `/api/notifications/${id}/read`,
-      MARK_ALL_READ: '/api/notifications/mark-all-read',
+      MARK_ALL_READ: '/api/notifications/read-all',
+    },
+    // Tickets
+    TICKETS: {
+      CREATE: '/api/notifications/tickets',
+      GET_ALL: '/api/notifications/tickets',
+      GET_SUMMARY: '/api/notifications/tickets/summary',
+      GET_HELP_CENTER: '/api/notifications/help-center',
+      GET_BY_ID: (id: string) => `/api/notifications/tickets/${id}`,
+      REPLY: (id: string) => `/api/notifications/tickets/${id}/reply`,
+      ASSIGN: (id: string) => `/api/notifications/tickets/${id}/assign`,
+      UPDATE_STATUS: (id: string) => `/api/notifications/tickets/${id}/status`,
+      ESCALATE: (id: string) => `/api/notifications/tickets/${id}/escalate`,
     },
     // Vendors
     VENDORS: {
@@ -92,7 +131,19 @@ export const API_CONFIG = {
     DELIVERY: {
       TRACK: (orderId: string) => `/api/delivery/track/${orderId}`,
     },
+    // Designs
+    DESIGNS: {
+      TEMPLATES_PREMIUM: '/api/designs/templates/premium',
+      TEMPLATES: '/api/designs/templates',
+      FROM_TEMPLATE: '/api/designs/from-template',
+      BLANK: '/api/designs/blank',
+      SAVE: '/api/designs',
+      MY_DESIGNS: '/api/designs',
+      DESIGN_BY_ID: (id: string) => `/api/designs/${id}`,
+      UPDATE_DESIGN: (id: string) => `/api/designs/${id}`,
+      APPROVE_DESIGN: (id: string) => `/api/designs/${id}/approve`,
+    },
   },
-};
+} as const;
 
 export default API_CONFIG;
