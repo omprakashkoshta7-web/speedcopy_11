@@ -1,6 +1,6 @@
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: import.meta.env.VITE_API_URL || 'https://product-202671058278.asia-south1.run.app',
+  BASE_URL: import.meta.env.VITE_GATEWAY_URL || 'https://gateway-202671058278.asia-south1.run.app',
   TIMEOUT: 30000,
   TWILIO_VERIFY_SERVICE_SID: import.meta.env.VITE_TWILIO_VERIFY_SERVICE_SID || 'VAb0924bd6b4422558eff214e98882820',
   ENDPOINTS: {
