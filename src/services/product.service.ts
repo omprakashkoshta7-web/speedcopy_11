@@ -152,11 +152,24 @@ class ProductService {
     limit?: number;
     category?: string;
   }) {
-    const response = await apiClient.get(
-      API_CONFIG.ENDPOINTS.PRODUCTS.GIFTING.PRODUCTS,
-      { params }
-    );
-    return response.data;
+    try {
+      const response = await apiClient.get(
+        API_CONFIG.ENDPOINTS.PRODUCTS.GIFTING.PRODUCTS,
+        { params }
+      );
+      return response.data;
+    } catch (error: any) {
+      console.error('Error fetching gifting products:', error);
+      // Fallback - return empty array instead of crashing
+      return {
+        success: false,
+        data: {
+          products: [],
+          meta: { total: 0, page: 1, limit: 12, pages: 0 }
+        },
+        message: 'Failed to fetch gifting products'
+      };
+    }
   }
 
   async getGiftingProductById(id: string) {
@@ -171,11 +184,24 @@ class ProductService {
     limit?: number;
     category?: string;
   }) {
-    const response = await apiClient.get(
-      API_CONFIG.ENDPOINTS.PRODUCTS.SHOPPING.PRODUCTS,
-      { params }
-    );
-    return response.data;
+    try {
+      const response = await apiClient.get(
+        API_CONFIG.ENDPOINTS.PRODUCTS.SHOPPING.PRODUCTS,
+        { params }
+      );
+      return response.data;
+    } catch (error: any) {
+      console.error('Error fetching shopping products:', error);
+      // Fallback - return empty array instead of crashing
+      return {
+        success: false,
+        data: {
+          products: [],
+          meta: { total: 0, page: 1, limit: 12, pages: 0 }
+        },
+        message: 'Failed to fetch shopping products'
+      };
+    }
   }
 
   async getShoppingProductById(id: string) {
