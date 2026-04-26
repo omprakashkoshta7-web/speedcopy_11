@@ -50,8 +50,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setUser(null);
     };
 
-    window.addEventListener('auth:unauthorized', onUnauthorized as EventListener);
-    return () => window.removeEventListener('auth:unauthorized', onUnauthorized as EventListener);
+    window.addEventListener('auth:unauthorized', onUnauthorized);
+    return () => window.removeEventListener('auth:unauthorized', onUnauthorized);
   }, []);
 
   const login = async (data: LoginData) => {
