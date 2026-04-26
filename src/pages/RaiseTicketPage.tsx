@@ -24,6 +24,8 @@ const RaiseTicketPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [recentOrders, setRecentOrders] = useState<any[]>([]);
+  const [attachments, setAttachments] = useState<File[]>([]);
+  const [dragActive, setDragActive] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -43,6 +45,40 @@ const RaiseTicketPage: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLTextAreaElement>) => {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+  };
+
+  const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true);
+    } else if (e.type === 'dragleave') {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      const newFiles = Array.from(files).filter(file => file.size <= 10 * 1024 * 1024);
+      setAttachments(prev => [...prev, ...newFiles]);
+    }
+  };
+
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.currentTarget.files;
+    if (files && files.length > 0) {
+      const newFiles = Array.from(files).filter(file => file.size <= 10 * 1024 * 1024);
+      setAttachments(prev => [...prev, ...newFiles]);
+    }
+  };
+
+  const removeAttachment = (index: number) => {
+    setAttachments(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async () => {
@@ -229,14 +265,53 @@ const RaiseTicketPage: React.FC = () => {
             <label className="block text-sm font-semibold text-gray-700 mb-2">Attachments</label>
             <div
               className="flex flex-col items-center justify-center py-8 rounded-2xl cursor-pointer hover:bg-gray-100 transition"
-              style={{ border: '2px dashed #d1d5db', backgroundColor: '#f9fafb' }}
+              style={{ 
+                border: '2px dashed #d1d5db', 
+                backgroundColor: dragActive ? '#f0f9ff' : '#f9fafb',
+                borderColor: dragActive ? '#3b82f6' : '#d1d5db'
+              }}
+              onDragEnter={handleDrag}
+              onDragLeave={handleDrag}
+              onDragOver={handleDrag}
+              onDrop={handleDrop}
             >
-              <svg className="w-8 h-8 mb-3" style={{ color: '#9ca3af' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-              </svg>
-              <p className="text-sm font-semibold text-gray-700">Click to upload or drag and drop</p>
-              <p className="text-xs mt-1" style={{ color: '#6366f1' }}>Photos, PDFs, or Screenshots (Max 10MB)</p>
+              <input
+                type="file"
+                id="file-input"
+                multiple
+                onChange={handleFileInput}
+                style={{ display: 'none' }}
+                accept="image/*,.pdf,.doc,.docx"
+              />
+              <label htmlFor="file-input" className="flex flex-col items-center cursor-pointer w-full">
+                <svg className="w-8 h-8 mb-3" style={{ color: '#9ca3af' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                <p className="text-sm font-semibold text-gray-700">Click to upload or drag and drop</p>
+                <p className="text-xs mt-1" style={{ color: '#6366f1' }}>Photos, PDFs, or Screenshots (Max 10MB)</p>
+              </label>
             </div>
+            {attachments.length > 0 && (
+              <div className="mt-4 space-y-2">
+                {attachments.map((file, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <svg className="w-4 h-4" style={{ color: '#6366f1' }} fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+                        <path fillRule="evenodd" d="M3 4a2 2 0 00-2 2v4a1 1 0 001 1h12a1 1 0 001-1V6a2 2 0 00-2-2H3zm0 1h10v4H3V5z" clipRule="evenodd" />
+                      </svg>
+                      <span className="text-sm text-gray-700">{file.name}</span>
+                    </div>
+                    <button
+                      onClick={() => removeAttachment(index)}
+                      className="text-red-500 hover:text-red-700 text-sm font-semibold"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Actions */}
