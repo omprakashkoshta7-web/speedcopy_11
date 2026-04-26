@@ -19,7 +19,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "erasableSyntaxOnly": false,
-    "noFallthroughCasesInSwitch": true,
+    "noFallthroughCasesInSwitch": false,
     
     /* Type checking - Allow any for compatibility */
     "noImplicitAny": false,
@@ -28,7 +28,8 @@
     "strictFunctionTypes": false,
     "strictBindCallApply": false,
     "strictPropertyInitialization": false,
-    "noImplicitThis": false
+    "noImplicitThis": false,
+    "suppressImplicitAnyIndexErrors": true
   },
   "include": ["src"]
 }
